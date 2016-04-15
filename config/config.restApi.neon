@@ -1,0 +1,18 @@
+services:
+	- Wame\RestApiModule\Router\RestApiRouteList
+
+	- Wame\RestApiModule\Loaders\RepositoryAnnotationRestApiLoader
+	- Wame\RestApiModule\Loaders\MapRestApiLoader
+	restApiApplication:
+		class: Wame\RestApiModule\RestApiApplication
+		setup:
+		- addRouteLoader(@Wame\RestApiModule\Loaders\RepositoryAnnotationRestApiLoader)
+		- addRouteLoader(@Wame\RestApiModule\Loaders\MapRestApiLoader)
+	
+	- Wame\RestApiModule\DataConverter\DateDataConverter
+	- Wame\RestApiModule\DataConverter\ObjectDataConverter
+	restApiDataConverter:
+		class: Wame\RestApiModule\DataConverter\RestApiDataConverter
+		setup:
+		- addConverter(@Wame\RestApiModule\DataConverter\DateDataConverter)
+		- addConverter(@Wame\RestApiModule\DataConverter\ObjectDataConverter)
