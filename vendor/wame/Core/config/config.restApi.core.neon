@@ -1,5 +1,2 @@
 services:
-	restApiRouterItem: Wame\RestApiModule\Vendor\Core\Router\RestApiRouterItem
-	router:
-		setup:
-			- addRoute(@restApiRouterItem::setup())
+	- {class: Wame\RestApiModule\Vendor\Core\Router\RestApiRouterItem, tags: [run]}
