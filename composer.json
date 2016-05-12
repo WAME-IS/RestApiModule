@@ -10,7 +10,7 @@
 		}
 	],
 	"require": {
-		"wame/core": "*"
+		"wame/Core": "*"
 	},
 	"autoload": {
 		"classmap": ["."]
