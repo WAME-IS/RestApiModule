@@ -39,6 +39,16 @@ class ApiResponse extends Object implements IResponse {
 	public function getPayload() {
 		return $this->payload;
 	}
+	
+	/**
+	 * @param array|stdClass $payload
+	 * @return \Wame\RestApiModule\ApiResponse
+	 */
+	public function setPayload($payload) {
+		$this->payload = $payload;
+		
+		return $this;
+	}
 
 	/**
 	 * Returns the code of response
