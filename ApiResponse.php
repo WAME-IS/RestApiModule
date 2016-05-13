@@ -67,7 +67,8 @@ class ApiResponse extends Object implements IResponse {
 		$httpResponse->setExpiration(FALSE); //TODO browser caching; ETAG
 		$httpResponse->setCode($this->code);
 
-		$accept = Strings::split($httpRequest->getHeader("Accept"), ",")[0];
+//		$accept = Strings::split($httpRequest->getHeader("Accept"), ",")[0];
+		$accept = explode($httpRequest->getHeader("Accept"), ",")[0];
 		if ($accept == "application/xml") {
 			$this->sendXml($httpRequest, $httpResponse);
 		} else {
