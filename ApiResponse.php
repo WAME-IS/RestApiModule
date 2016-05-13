@@ -68,7 +68,8 @@ class ApiResponse extends Object implements IResponse {
 		$httpResponse->setCode($this->code);
 
 //		$accept = Strings::split($httpRequest->getHeader("Accept"), ",")[0];
-		$accept = explode($httpRequest->getHeader("Accept"), ",")[0];
+		$accept = explode(",", $httpRequest->getHeader("Accept"))[0];
+
 		if ($accept == "application/xml") {
 			$this->sendXml($httpRequest, $httpResponse);
 		} else {
@@ -91,7 +92,7 @@ class ApiResponse extends Object implements IResponse {
 		$httpResponse->setContentType('application/xml', 'utf-8');
 
 		$xml = new SimpleXMLElement('<root/>');
-		$xml->addAttribute("source", HOSTNAME);
+		$xml->addAttribute("source", HOSTNAME . $httpRequest->url->path);
 		array_walk_recursive($this->payload, [$xml, 'addChild']);
 		
 		echo $xml->asXML();
