@@ -24,9 +24,23 @@ class RestApiDataConverter extends Object {
 	 * @param string $type
 	 * @return object
 	 */
-	public function toJson($value, $type) {
+	public function toJson($value, $type = null) {
+		if (!$type) {
+			$type = self::findTypeByValue($value);
+		}
 		$converter = $this->getConverter($type);
-		return $converter->toJson($value, $type);
+		if ($converter) {
+			return $converter->toJson($value, $type);
+		}
+		return $value;
+	}
+
+	public static function findTypeByValue($var) {
+		if (is_object($var)) {
+			return get_class($var);
+		} else {
+			return gettype($var);
+		}
 	}
 
 	/**
@@ -37,7 +51,10 @@ class RestApiDataConverter extends Object {
 	 */
 	public function fromJson($value, $type) {
 		$converter = $this->getConverter($type);
-		return $converter->fromJson($value, $type);
+		if ($converter) {
+			return $converter->fromJson($value, $type);
+		}
+		return $value;
 	}
 
 	/**
@@ -68,5 +85,5 @@ class RestApiDataConverter extends Object {
 	public function addConverter(IDataConverter $converter) {
 		$this->converters[] = $converter;
 	}
-	
+
 }

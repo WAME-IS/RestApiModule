@@ -4,9 +4,12 @@ namespace Wame\RestApiModule;
 
 use Exception,
 	InvalidArgumentException,
+	Nette\DI\PhpReflection,
 	Nette\Http\Response,
 	Nette\Object,
 	Nette\Utils\Callback,
+	Tracy\Debugger,
+	Wame\RestApiModule\DataConverter\RestApiDataConverter,
 	Wame\RestApiModule\Loaders\RestApiLoader,
 	Wame\RestApiModule\Router\RestApiRoute,
 	Wame\RestApiModule\Router\RestApiRouteList;
@@ -21,8 +24,12 @@ class RestApiApplication extends Object {
 	/** @var RestApiRouteList */
 	private $apiRouteList;
 
-	public function __construct(RestApiRouteList $apiRouteList) {
+	/** @var RestApiDataConverter */
+	private $dataConverter;
+
+	public function __construct(RestApiRouteList $apiRouteList, RestApiDataConverter $dataConverter) {
 		$this->apiRouteList = $apiRouteList;
+		$this->dataConverter = $dataConverter;
 	}
 
 	/**
@@ -41,11 +48,26 @@ class RestApiApplication extends Object {
 
 		try {
 			$result = $this->callRoute($apiRoute, $request);
+			
+		/*
+		 * Handling of exceptions
+		 * Dont display error messsages of unknow Exceptions in production mode (security reasons)
+		 */
+		} catch (\InvalidArgumentException $e) {
+			return new ApiResponse(['error' => $e->getMessage()], 500, $apiRoute);
+		} catch (\Wame\Core\Exception\RepositoryException $e) {
+			return new ApiResponse(['error' => $e->getMessage()], 500, $apiRoute);
 		} catch (Exception $e) {
-			return new ApiResponse(['error' => $e->getMessage()], 500);
+			if (Debugger::$productionMode) {
+				return new ApiResponse(['error' => "Server error"], 500, $apiRoute);
+			} else {
+				return new ApiResponse(['error' => $e->getMessage()], 500, $apiRoute);
+			}
 		}
 
-		return new ApiResponse($result, 200);
+		$result = $this->dataConverter->toJson($result);
+
+		return new ApiResponse($result, 200, $apiRoute);
 	}
 
 	/**
@@ -57,9 +79,17 @@ class RestApiApplication extends Object {
 	private function callRoute(RestApiRoute $apiRoute, $request) {
 		$params = [];
 
-		foreach (Callback::toReflection($apiRoute->getCallback())->getParameters() as $parameter) {
+		$callbackReflection = Callback::toReflection($apiRoute->getCallback());
+		foreach ($callbackReflection->getParameters() as $parameter) {
 			if (isset($request[$parameter->name])) {
-				$params[] = $request[$parameter->name];
+				$type = PhpReflection::getParameterType($parameter);
+				if ($type) {
+					$params[] = $this->restApiDataConverter->fromJson($request[$parameter->name], $type);
+				} else {
+					$params[] = $request[$parameter->name];
+				}
+			} else if ($parameter->isOptional()) {
+				$params[] = $parameter->getDefaultValue();
 			} else {
 				throw new InvalidArgumentException("Argument {$parameter->name} missing.");
 			}

@@ -14,11 +14,11 @@ use Nette\DI\PhpReflection,
  */
 class ObjectDataConverter implements IDataConverter {
 
-	/** @var RestApiDataConverter */
-	private $restApiDataConverter;
+	/** @var \Nette\DI\Container */
+	private $container;
 
-	public function __construct(RestApiDataConverter $restApiDataConverter) {
-		$this->restApiDataConverter = $restApiDataConverter;
+	public function __construct(\Nette\DI\Container $container) {
+		$this->container = $container;
 	}
 
 	/**
@@ -28,7 +28,7 @@ class ObjectDataConverter implements IDataConverter {
 	 * @return int Score
 	 */
 	public function scoreForType($type) {
-		return new ClassType($type) ? 1 : 0;
+		return class_exists($type) ? 1 : 0;
 	}
 
 	/**
@@ -37,10 +37,14 @@ class ObjectDataConverter implements IDataConverter {
 	 * @return mixed Converted value
 	 */
 	public function toJson($value, $type) {
+		if (!$value) {
+			return null;
+		}
+		
 		$object = new stdClass();
 
 		$reflection = new ClassType($type);
-		if (!$reflection->is($value)) {
+		if (!$reflection->is(get_class($value))) {
 			throw new InvalidArgumentException("Value $value is of wrong type (" . get_class($value) . ").");
 		}
 
@@ -55,7 +59,10 @@ class ObjectDataConverter implements IDataConverter {
 	 * @return mixed Converted value
 	 */
 	public function fromJson($value, $type) {
-
+		if(!$value) {
+			return null;
+		}
+		
 		$reflection = new ClassType($type);
 
 		if (!$reflection->isInstantiable()) {
@@ -80,12 +87,18 @@ class ObjectDataConverter implements IDataConverter {
 			$propertyName = $property->name;
 			$var = $property->getAnnotation("var");
 
-			if($var) {
+			if ($var) {
 				$var = PhpReflection::expandClassName($var, $reflection);
-				$object->$propertyName = $this->restApiDataConverter->$action($value->$propertyName, $var);
+			} else {
+				$var = RestApiDataConverter::findTypeByValue($value->$propertyName);
+			}
+
+			if ($var) {
+				$object->$propertyName = $this->container->getService("restApiDataConverter")->$action($value->$propertyName, $var);
 			} else {
 				$object->$propertyName = $value->$propertyName;
 			}
 		}
 	}
+
 }
