@@ -35,8 +35,8 @@ class ArrayDataConverter implements IDataConverter {
 		}
 		
 		$out = [];
-		foreach ($value as $entry) {
-			$out[] = $this->container->getService("restApiDataConverter")->fromJson($entry, $subtype);
+		foreach ($value as $key => $entry) {
+			$out[$key] = $this->container->getService("restApiDataConverter")->fromJson($entry, $subtype);
 		}
 		return $out;
 	}
@@ -44,11 +44,11 @@ class ArrayDataConverter implements IDataConverter {
 	public function toJson($value, $type) {
 		$subtype = $this->toSubtype($type);
 		$out = [];
-		foreach ($value as $entry) {
+		foreach ($value as $key => $entry) {
 			if (!$subtype) {
 				$subtype = RestApiDataConverter::findTypeByValue($entry);
 			}
-			$out[] = $this->container->getService("restApiDataConverter")->toJson($entry, $subtype);
+			$out[$key] = $this->container->getService("restApiDataConverter")->toJson($entry, $subtype);
 		}
 		return $out;
 	}
