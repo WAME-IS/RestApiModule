@@ -1,2 +1,0 @@
-services:
-	- {class: Wame\RestApiModule\Vendor\Core\Router\RestApiRouterItem, tags: [run]}
