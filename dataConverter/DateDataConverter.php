@@ -32,7 +32,7 @@ class DateDataConverter implements IDataConverter {
 	 * @return mixed Converted value
 	 */
 	public function toJson($value, $type) {
-		return $value->format(self::ISO8601);
+		return $value ? $value->format(self::ISO8601) : null;
 	}
 
 	/**

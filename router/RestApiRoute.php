@@ -43,5 +43,4 @@ class RestApiRoute extends Object {
 	function getCallback() {
 		return $this->callback;
 	}
-
 }
