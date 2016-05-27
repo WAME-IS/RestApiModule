@@ -21,7 +21,7 @@ class RestApiRouterItem {
 			"apiVersion" => 1,
 			"apiResource" => NULL
 		];
-		$entity->sort = 800;
+		$entity->sort = 20;
 		$entity->sitemap = false;
 		$entity->status = 1;
 		return $entity;
