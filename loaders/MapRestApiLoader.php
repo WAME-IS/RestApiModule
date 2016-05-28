@@ -29,35 +29,54 @@ class MapRestApiLoader extends \Nette\Object implements RestApiLoader {
 	 * @api {get} / Display informations about API
 	 */
 	public function displayMap() {
+
+		$routes = [];
 		$resources = [];
 
 		foreach ($this->restApiRouteList as $route) {
-			if (!key_exists($route->getResource(), $resources)) {
-				$resources[$route->getResource()] = [];
+
+			$routes[] = self::getInfo($route);
+
+			if ($route->getResource() && !in_array($route->getResource(), $resources)) {
+				$resources[] = $route->getResource();
 			}
-
-			$reflection = Callback::toReflection($route->getCallback());
-
-			$apiAnnotation = $reflection->getAnnotation("api");
-			$apiInfo = Strings::match($apiAnnotation, '~^\{(.+?)\} (.+?) (.+)*$~');
-
-			$info['link'] = $this->apiLink($apiInfo[2]);
-			$info['short_description'] = $apiInfo[3];
-
-			$description = $reflection->getDescription();
-			if ($description) {
-				$info['description'] = $description;
-			}
-
-			$resources[$route->getResource()][$route->getMethod()] = $info;
 		}
 
 		return [
-			"resources" => $resources
+			"_resources" => $resources,
+			"_links" => $routes
 		];
 	}
+	
+	/**
+	 * Get displayable information from rest api route
+	 * 
+	 * @param RestApiRoute $route
+	 * @return array
+	 */
+	public static function getInfo($route) {
+		$info = [];
+		$reflection = Callback::toReflection($route->getCallback());
 
-	private function apiLink($link) {
+		$apiAnnotation = $reflection->getAnnotation("api");
+		$apiInfo = Strings::match($apiAnnotation, '~^\{(.+?)\} ([^ ]+)(.*)$~');
+
+		$info['method'] = $route->getMethod();
+		$info['link'] = self::apiLink($apiInfo[2]);
+
+		if ($apiInfo[3]) {
+			$info['short_description'] = trim($apiInfo[3]);
+		}
+
+		$description = $reflection->getDescription();
+		if ($description) {
+			$info['description'] = $description;
+		}
+		return $info;
+	}
+
+	
+	private static function apiLink($link) {
 		return HOSTNAME . $link;
 	}
 

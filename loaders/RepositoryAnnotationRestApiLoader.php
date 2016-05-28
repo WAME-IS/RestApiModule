@@ -34,9 +34,10 @@ class RepositoryAnnotationRestApiLoader implements RestApiLoader {
 		foreach ($repository->getReflection()->getMethods() as $method) {
 			$annotation = $method->getAnnotation('api');
 			if ($annotation) {
-				$apiInfo = Strings::match($annotation, '~^\{(.+?)\} (.+?)(:.+?){0,1}( .+)*$~');
+				$apiInfo = Strings::match($annotation, '~^\{(.+?)\} ([^ ]+)(.*)$~');
+				$resource = Strings::trim(explode(":", $apiInfo[2])[0], "/\\"); //remove arguments and /'es
 				$routes[] = new RestApiRoute(
-						Strings::upper($apiInfo[1]), Strings::trim($apiInfo[2], "/\\"), Callback::closure($repository, $method->getName()));
+						Strings::upper($apiInfo[1]), $resource, Callback::closure($repository, $method->getName()));
 			}
 		}
 		return $routes;
