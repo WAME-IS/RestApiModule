@@ -62,7 +62,7 @@ class MapRestApiLoader extends \Nette\Object implements RestApiLoader {
 		$apiInfo = Strings::match($apiAnnotation, '~^\{(.+?)\} ([^ ]+)(.*)$~');
 
 		$info['method'] = $route->getMethod();
-		$info['link'] = self::apiLink($apiInfo[2]);
+		$info['_link'] = self::apiLink($apiInfo[2]);
 
 		if ($apiInfo[3]) {
 			$info['short_description'] = trim($apiInfo[3]);
@@ -75,9 +75,14 @@ class MapRestApiLoader extends \Nette\Object implements RestApiLoader {
 		return $info;
 	}
 
-	
-	private static function apiLink($link) {
-		return HOSTNAME . $link;
+	/**
+	 * Return link for given resource
+	 * 
+	 * @param stirng $link
+	 * @return string
+	 */
+	public static function apiLink($link) {
+		return HOSTNAME . '/api/v1' . $link;
 	}
 
 }
