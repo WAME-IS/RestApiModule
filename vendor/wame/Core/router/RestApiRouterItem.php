@@ -13,7 +13,7 @@ class RestApiRouterItem {
 	private $translator;
 	
 	public function __construct(\h4kuna\Gettext\GettextSetup $translator) {
-		$this->translator= $translator;
+		$this->translator = $translator;
 	}
 	
 	public function setup() {
