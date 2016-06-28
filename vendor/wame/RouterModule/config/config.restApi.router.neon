@@ -1,0 +1,5 @@
+services:
+	- Wame\RestApiModule\Vendor\Core\Router\RestApiRouterItem
+	defaultRoutesRegister:
+		setup:
+		- register(@Wame\RestApiModule\Vendor\Core\Router\RestApiRouterItem::create())
