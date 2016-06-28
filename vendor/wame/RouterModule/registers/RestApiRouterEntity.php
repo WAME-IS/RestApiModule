@@ -1,6 +1,6 @@
 <?php
 
-namespace Wame\RestApiModule\Vendor\Core\Router;
+namespace Wame\RestApiModule\Vendor\Core\Registers;
 
 use Wame\RouterModule\Entities\RouterEntity;
 
@@ -9,7 +9,7 @@ use Wame\RouterModule\Entities\RouterEntity;
  * 
  * @author Dominik Gmiterko <ienze@ienze.me>
  */
-class RestApiRouterItem {
+class RestApiRouterEntity {
 
 	public function create() {
 		$entity = new RouterEntity();
