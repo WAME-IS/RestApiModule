@@ -18,14 +18,11 @@ class RestApiRouteList extends ArrayList {
 	 * @return ApiRoute|null
 	 */
 	public function match($request) {
-		$possibleRoutes = [];
-
-		foreach ($this as $route) {
-			if ($route->getMethod() == $request['method'] && $route->getResource() == $request['apiResource']) {
-				$possibleRoutes[] = $route;
-			}
-		}
-
+		
+		$possibleRoutes = array_filter($this->matchResource($request), function($route) use($request) {
+			return $route->getMethod() == $request['method'];
+		});
+		
 		if (!$possibleRoutes) {
 			return null;
 		}
@@ -37,8 +34,26 @@ class RestApiRouteList extends ArrayList {
 				return $score2 - $score1;
 			});
 		}
-		
+
 		return $possibleRoutes[0];
+	}
+
+	/**
+	 * Find matching routes in list of provided routes, checks only resource. Can be used to get all supported methods.
+	 * 
+	 * @param array $request
+	 * @return ApiRoute[]
+	 */
+	public function matchResource($request) {
+		$possibleRoutes = [];
+
+		foreach ($this as $route) {
+			if ($route->getResource() == $request['apiResource']) {
+				$possibleRoutes[] = $route;
+			}
+		}
+
+		return $possibleRoutes;
 	}
 
 	/**

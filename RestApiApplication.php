@@ -40,6 +40,10 @@ class RestApiApplication extends Object {
 	 */
 	public function request($request) {
 
+		if ($request['method'] == 'OPTIONS') {
+			return $this->requestOptions($request);
+		}
+
 		$apiRoute = $this->apiRouteList->match($request);
 
 		if (!$apiRoute) {
@@ -48,11 +52,11 @@ class RestApiApplication extends Object {
 
 		try {
 			$result = $this->callRoute($apiRoute, $request);
-			
-		/*
-		 * Handling of exceptions
-		 * Dont display error messsages of unknow Exceptions in production mode (security reasons)
-		 */
+
+			/*
+			 * Handling of exceptions
+			 * Dont display error messsages of unknow Exceptions in production mode (security reasons)
+			 */
 		} catch (\InvalidArgumentException $e) {
 			return new ApiResponse(['error' => $e->getMessage()], 500, $apiRoute);
 		} catch (\Wame\Core\Exception\RepositoryException $e) {
@@ -68,6 +72,22 @@ class RestApiApplication extends Object {
 		$result = $this->dataConverter->toJson($result);
 
 		return new ApiResponse($result, 200, $apiRoute);
+	}
+
+	private function requestOptions($request) {
+		$apiRoutes = $this->apiRouteList->matchResource($request);
+
+		$methods = [];
+		$payload = [];
+
+		foreach ($apiRoutes as $apiRoute) {
+			$methods[] = $apiRoute->getMethod();
+			$payload[] = Loaders\MapRestApiLoader::getInfo($apiRoute);
+		}
+
+		$response = new ApiResponse($payload);
+		$response->setHeaders(['Allow' => implode(',', array_unique($methods))]);
+		return $response;
 	}
 
 	/**

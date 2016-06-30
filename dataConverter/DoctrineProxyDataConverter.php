@@ -4,7 +4,8 @@ namespace Wame\RestApiModule\DataConverter;
 
 use Doctrine\ORM\Proxy\Proxy,
 	Kdyby\Doctrine\EntityManager,
-	Nette\Utils\Strings;
+	Nette\Utils\Strings,
+	Wame\RestApiModule\Loaders\MapRestApiLoader;
 
 /**
  * @author Dominik Gmiterko <ienze@ienze.me>
@@ -23,21 +24,46 @@ class DoctrineProxyDataConverter implements IDataConverter {
 	}
 
 	public function fromJson($value, $type) {
-		
-		if(!is_scalar($value)) {
-			throw new \Nette\InvalidArgumentException("This field has to be only ID.");
+
+		$id = null;
+		if (is_scalar($value)) {
+			$id = $value;
+		} elseif (is_array($value)) {
+			$id = $value['id'];
 		}
-		
+
 		$superclasses = class_parents($type);
 		$entityType = $superclasses[count($superclasses) - 1];
-		
-		return $this->em->getRepository($entityType)->find($value);
-		
-		//possible feature: if entity doesnt exist create it?
+
+		$entity = $this->em->getRepository($entityType)->find($id);
+
+		if (!$entity) {
+			//possible feature: if entity doesnt exist create it?
+		}
+
+		return $entity;
 	}
 
 	public function toJson($value, $type) {
-		return ['id' => $value->id];
+		return [
+			'id' => $value->id,
+			'_link' => MapRestApiLoader::apiLink('/' . self::doctrineTypeToResource($type) . '/' . $value->id)
+		];
+	}
+
+	/**
+	 * Coverts doctrine class to (possible?) resource name
+	 * 
+	 * @param string $type
+	 * @return string
+	 */
+	public static function doctrineTypeToResource($type) {
+		$stype = explode("\\", $type);
+		$stype = $stype[count($stype) - 1];
+		if (Strings::endsWith($stype, "Entity")) {
+			$stype = substr($stype, 0, -6);
+		}
+		return Strings::firstLower($stype);
 	}
 
 }

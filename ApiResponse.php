@@ -29,6 +29,9 @@ class ApiResponse extends Object implements IResponse {
 	/** @var RestApiRoute */
 	private $apiRoute;
 
+	/** @var array Special headers */
+	private $headers;
+
 	/**
 	 * @param array|stdClass payload
 	 * @param string MIME content type
@@ -65,6 +68,22 @@ class ApiResponse extends Object implements IResponse {
 	}
 
 	/**
+	 * 
+	 * @return array
+	 */
+	function getHeaders() {
+		return $this->headers;
+	}
+
+	/**
+	 * 
+	 * @param array $headers
+	 */
+	function setHeaders($headers) {
+		$this->headers = $headers;
+	}
+
+	/**
 	 * Sends response to output.
 	 * @return void
 	 */
@@ -72,6 +91,12 @@ class ApiResponse extends Object implements IResponse {
 
 		$httpResponse->setExpiration(FALSE); //TODO browser caching; ETAG
 		$httpResponse->setCode($this->code);
+
+		if ($this->headers) {
+			foreach ($this->headers as $name => $value) {
+				$httpResponse->setHeader($name, $value);
+			}
+		}
 
 		$accept = explode(",", $httpRequest->getHeader("Accept"))[0];
 
