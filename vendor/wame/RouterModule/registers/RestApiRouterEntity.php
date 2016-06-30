@@ -11,7 +11,7 @@ use Wame\RouterModule\Entities\RouterEntity;
  */
 class RestApiRouterEntity {
 
-	public function create() {
+	public static function create() {
 		$entity = new RouterEntity();
 		$entity->route = "[<lang>/]api/[v<apiVersion>/]<apiResource>[/<id>]";
 		$entity->module = "RestApi";
