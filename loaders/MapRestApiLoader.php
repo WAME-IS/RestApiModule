@@ -2,17 +2,16 @@
 
 namespace Wame\RestApiModule\Loaders;
 
-use Nette\Reflection\Method,
-	Nette\Utils\Callback,
-	Nette\Utils\Strings,
-	Wame\RestApiModule\Router\RestApiRoute,
-	Wame\RestApiModule\Router\RestApiRouteList;
-use const HOSTNAME;
+use Nette\Object;
+use Nette\Utils\Callback;
+use Nette\Utils\Strings;
+use Wame\RestApiModule\Router\RestApiRoute;
+use Wame\RestApiModule\Router\RestApiRouteList;
 
 /**
  * @author Dominik Gmiterko <ienze@ienze.me>
  */
-class MapRestApiLoader extends \Nette\Object implements RestApiLoader {
+class MapRestApiLoader extends Object implements RestApiLoader {
 
 	/** @var RestApiRouteList */
 	private $restApiRouteList;

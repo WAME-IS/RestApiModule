@@ -11,7 +11,6 @@ use Nette\Application\IResponse,
 	SimpleXMLElement,
 	stdClass,
 	Wame\RestApiModule\Router\RestApiRoute;
-use const HOSTNAME;
 
 /**
  * JSON response used by REST API responses.
