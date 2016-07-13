@@ -1,18 +1,21 @@
 {
-	"name": "wame/RestApiModule",
-	"version": "0.0.1",
-	"description": "CMS WAME admin Core",
-	"homepage": "http://wame.sk/cms-wame-admin",
-	"authors": [
-		{
-			"name": "Dominik Gmiterko",
-			"homepage": "http://ienze.me"
-		}
-	],
-	"require": {
-		"wame/Core": "*"
-	},
-	"autoload": {
-		"classmap": ["."]
-	}
+    "name": "wame\/RestApiModule",
+    "version": "0.0.1",
+    "description": "CMS WAME admin Core",
+    "homepage": "http:\/\/wame.sk\/cms-wame-admin",
+    "authors": [
+        {
+            "name": "Dominik Gmiterko",
+            "homepage": "http:\/\/ienze.me"
+        }
+    ],
+    "require": {
+        "wame\/Core": "*"
+    },
+    "autoload": {
+        "classmap": [
+            "."
+        ]
+    },
+    "type": "wame-module"
 }
