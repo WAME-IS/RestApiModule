@@ -1,4 +1,4 @@
 services:
 	defaultRoutesRegister:
 		setup:
-		- add(Wame\RestApiModule\Vendor\Core\Registers\RestApiRouterEntity::create())
+		- add(Wame\RestApiModule\Vendor\Core\Registers\RestApiRouterEntity::create(), 'api')
