@@ -13,7 +13,7 @@ class RestApiRouterEntity {
 
 	public static function create() {
 		$entity = new RouterEntity();
-		$entity->route = "[<lang>/]api/[v<apiVersion>/]<apiResource>[/<id>]";
+		$entity->route = "[<lang>/]api/[v<apiVersion>/]<apiResource>";
 		$entity->module = "RestApi";
 		$entity->presenter = "RestApi";
 		$entity->action = "default";

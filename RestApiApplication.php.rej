@@ -1,0 +1,10 @@
+diff a/vendor/wame/RestApiModule/RestApiApplication.php b/vendor/wame/RestApiModule/RestApiApplication.php	(rejected hunks)
+@@ -39,7 +39,7 @@ class RestApiApplication extends Object {
+ 	 * @return Response response
+ 	 */
+ 	public function request($request) {
+-
++        
+ 		if ($request['method'] == 'OPTIONS') {
+ 			return $this->requestOptions($request);
+ 		}
