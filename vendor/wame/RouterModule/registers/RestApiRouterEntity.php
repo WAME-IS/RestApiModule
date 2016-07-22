@@ -4,11 +4,6 @@ namespace Wame\RestApiModule\Vendor\Core\Registers;
 
 use Wame\RouterModule\Entities\RouterEntity;
 
-/**
- * Adds /api route to site router.
- * 
- * @author Dominik Gmiterko <ienze@ienze.me>
- */
 class RestApiRouterEntity {
 
 	public static function create() {
