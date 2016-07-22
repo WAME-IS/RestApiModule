@@ -39,7 +39,7 @@ class RestApiApplication extends Object {
 	 * @return Response response
 	 */
 	public function request($request) {
-
+        
 		if ($request['method'] == 'OPTIONS') {
 			return $this->requestOptions($request);
 		}

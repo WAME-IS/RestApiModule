@@ -1,22 +1,19 @@
 services:
-	- Wame\RestApiModule\Router\RestApiRouteList
+    - Wame\RestApiModule\Router\RestApiRouteList
 
-	- Wame\RestApiModule\Loaders\RepositoryAnnotationRestApiLoader
-	- Wame\RestApiModule\Loaders\MapRestApiLoader
-	restApiApplication:
-		class: Wame\RestApiModule\RestApiApplication
-		setup:
-		- addRouteLoader(@Wame\RestApiModule\Loaders\RepositoryAnnotationRestApiLoader)
-		- addRouteLoader(@Wame\RestApiModule\Loaders\MapRestApiLoader)
-	
-	- Wame\RestApiModule\DataConverter\ObjectDataConverter
-	- Wame\RestApiModule\DataConverter\ArrayDataConverter
-	- Wame\RestApiModule\DataConverter\DateDataConverter
-	- Wame\RestApiModule\DataConverter\DoctrineProxyDataConverter
-	restApiDataConverter:
-		class: Wame\RestApiModule\DataConverter\RestApiDataConverter
-		setup:
-		- addConverter(@Wame\RestApiModule\DataConverter\ObjectDataConverter)
-		- addConverter(@Wame\RestApiModule\DataConverter\ArrayDataConverter)		
-		- addConverter(@Wame\RestApiModule\DataConverter\DateDataConverter)
-		- addConverter(@Wame\RestApiModule\DataConverter\DoctrineProxyDataConverter)
+    - Wame\RestApiModule\Loaders\RepositoryAnnotationRestApiLoader
+    - Wame\RestApiModule\Loaders\MapRestApiLoader
+    restApiApplication:
+        class: Wame\RestApiModule\RestApiApplication
+        setup:
+        - addRouteLoader(@Wame\RestApiModule\Loaders\RepositoryAnnotationRestApiLoader)
+        - addRouteLoader(@Wame\RestApiModule\Loaders\MapRestApiLoader)
+
+    restApiDataConverter:
+        class: Wame\RestApiModule\DataConverter\RestApiDataConverter
+        setup:
+        - add(Wame\RestApiModule\DataConverter\ObjectDataConverter())
+        - add(Wame\RestApiModule\DataConverter\ArrayDataConverter())	
+        - add(Wame\RestApiModule\DataConverter\DateDataConverter())
+        - add(Wame\RestApiModule\DataConverter\DoctrineProxyDataConverter())
+        - add(Wame\RestApiModule\DataConverter\FileUploadDataConverter())

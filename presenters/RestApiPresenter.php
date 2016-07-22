@@ -24,6 +24,7 @@ class RestApiPresenter extends BasePresenter {
 
 	public function getApiRequest() {
 		$request = $this->getParameters();
+        $request = array_merge($request, $this->getRequest()->getFiles());
 		$request['method'] = $this->getHttpRequest()->getMethod();
 		return $request;
 	}
