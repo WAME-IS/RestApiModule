@@ -52,7 +52,6 @@ class FileUploadDataConverter implements IDataConverter
      */
     public function fromJson($value, $type)
     {
-        dump($value);
         if (!$value instanceof FileUpload) {
             throw new InvalidArgumentException("Invalid argument type.");
         }
