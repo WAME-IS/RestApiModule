@@ -3,14 +3,23 @@
     "version": "0.0.1",
     "description": "CMS WAME admin Core",
     "homepage": "http://wame.sk/cms-wame-admin",
+    "minimum-stability": "dev",
     "authors": [
+        {
+            "name": "WAME s.r.o.",
+            "homepage": "http://wame.sk"
+        },
         {
             "name": "Dominik Gmiterko",
             "homepage": "http://ienze.me"
         }
     ],
+    "repositories": [
+        { "type": "composer", "url": "http://packages.wame.sk" }
+    ],
+    "config": { "secure-http": false },
     "require": {
-        "wame/Core": "*"
+        "wame/Core": "0.0.*"
     },
     "autoload": {
         "classmap": [
