@@ -19,7 +19,7 @@
     ],
     "config": { "secure-http": false },
     "require": {
-        "wame/Core": "0.0.*"
+        "wame/Core": ">=0.0.1"
     },
     "autoload": {
         "classmap": [
