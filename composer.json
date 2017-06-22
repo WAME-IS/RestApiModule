@@ -18,7 +18,7 @@
         { "type": "composer", "url": "http://packages.wame.sk" }
     ],
     "config": { "secure-http": false },
-    "require": {
+    "softRequire": {
         "wame/Core": ">=0.0.1"
     },
     "autoload": {
