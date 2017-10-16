@@ -4,19 +4,21 @@ namespace Wame\RestApiModule\DataConverter;
 
 use Wame\Core\Registers\BaseRegister;
 
+
 /**
  * @author Dominik Gmiterko <ienze@ienze.me>
  */
 class RestApiDataConverter extends BaseRegister
 {
-
     public function __construct()
     {
         parent::__construct(IDataConverter::class);
     }
 
+
     /** @var array */
     private $typeCache = [];
+
 
     /**
      * Converts objects to JSON
@@ -30,12 +32,16 @@ class RestApiDataConverter extends BaseRegister
         if (!$type) {
             $type = self::findTypeByValue($value);
         }
+
         $converter = $this->getConverter($type);
+
         if ($converter) {
             return $converter->toJson($value, $type);
         }
+
         return $value;
     }
+
 
     public static function findTypeByValue($var)
     {
@@ -46,6 +52,7 @@ class RestApiDataConverter extends BaseRegister
         }
     }
 
+
     /**
      * Converts JSON to obejcts
      * 
@@ -55,11 +62,14 @@ class RestApiDataConverter extends BaseRegister
     public function fromJson($value, $type)
     {
         $converter = $this->getConverter($type);
+
         if ($converter) {
             return $converter->fromJson($value, $type);
         }
+
         return $value;
     }
+
 
     /**
      * Get best converter for given type
@@ -73,8 +83,10 @@ class RestApiDataConverter extends BaseRegister
 
             $bestScore = 0;
             $bestConverter = null;
+
             foreach ($this->getAll() as $converter) {
                 $score = $converter->scoreForType($type);
+
                 if ($score > $bestScore) {
                     $bestScore = $score;
                     $bestConverter = $converter;
@@ -86,4 +98,5 @@ class RestApiDataConverter extends BaseRegister
 
         return $this->typeCache[$type];
     }
+
 }
