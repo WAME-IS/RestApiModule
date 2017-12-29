@@ -1,5 +1,5 @@
 {
-    "name": "wameis/RestApiModule",
+    "name": "wame/RestApiModule",
     "version": "0.0.1",
     "description": "CMS WAME admin Core",
     "homepage": "http://wame.sk/cms-wame-admin",
@@ -19,7 +19,7 @@
     ],
     "config": { "secure-http": false },
     "require": {
-        "wameis/Core": ">=0.0.1"
+        "wame/Core": ">=0.0.1"
     },
     "autoload": {
         "classmap": [
