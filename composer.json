@@ -1,8 +1,8 @@
 {
     "name": "wame/RestApiModule",
     "version": "0.0.1",
-    "description": "CMS WAME admin Core",
-    "homepage": "http://wame.sk/cms-wame-admin",
+    "description": "Core",
+    "homepage": "https://wameis.org",
     "minimum-stability": "dev",
     "authors": [
         {
